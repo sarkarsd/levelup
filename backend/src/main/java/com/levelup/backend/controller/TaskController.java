@@ -4,6 +4,8 @@ package com.levelup.backend.controller;
 import com.levelup.backend.model.*;
 import com.levelup.backend.repository.TaskRepository;
 import com.levelup.backend.repository.UserRepository;
+import com.levelup.backend.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,10 @@ public class TaskController{
     @Autowired
     private UserRepository userRepository;
 
-    // POST /tasks – create a task
+     @Autowired
+    private UserService userService; // Inject UserService for level calculation
+
+    // POST /tasks – Create a task
 
     @PostMapping
     public String createTask(@RequestBody Task task) {
@@ -72,5 +77,43 @@ public class TaskController{
     public List<Task> getTasksByUser(@PathVariable Long userId) {
         return taskRepository.findByUserId(userId);
     }
+
+
+    // POST /tasks/{id}/complete – Mark a task as completed
+
+    @PostMapping("/{id}/complete")
+    public String completeTask(@PathVariable Long id) {
+
+        // Step 1: Get the task from DB
+        Task task = taskRepository.findById(id).orElse(null);
+        if (task == null) {
+            return "Task not found!";
+        }
+
+        // Step 2: Check if already completed
+        if (task.getStatus() == TaskStatus.COMPLETED) {
+            return "Task already completed!";
+        }
+
+        // Step 3: Mark task as COMPLETED
+        task.setStatus(TaskStatus.COMPLETED);
+        taskRepository.save(task); // Save status change
+
+        // Step 4: Add task XP to user
+        User user = task.getUser();
+        int newXp = user.getXp() + task.getXp();
+        user.setXp(newXp);
+
+        // Step 5: Recalculate user level
+        int newLevel = userService.calculateLevel(newXp);
+        user.setLevel(newLevel);
+
+        // Step 6: Save updated user
+        userRepository.save(user);
+
+        return "Task completed! XP added and level updated.";
+    }
+
+
 
 }
