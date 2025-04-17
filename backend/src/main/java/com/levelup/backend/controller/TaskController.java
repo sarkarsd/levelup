@@ -47,6 +47,11 @@ public class TaskController{
             }
         }
 
+        // Set deadline for DAILY task if its a daily task
+        if (task.getType() == TaskType.DAILY) {
+            task.setDeadline(LocalDateTime.now().plusDays(1));
+        }
+
 
         
         // Step 3: Set default values
