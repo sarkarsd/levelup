@@ -24,7 +24,7 @@ public class TaskService {
     @Autowired
     private UserService userService; // Injecting UserService to access calculateLevel method
 
-    @Scheduled(cron = "0 0 0 * * ?")  // Runs every day at midnight
+    @Scheduled(cron = "0 * * * * ?")  
     public void checkExpiredTasks() {
         List<Task> tasks = taskRepository.findByStatus(TaskStatus.PENDING);
 
