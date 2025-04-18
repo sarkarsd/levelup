@@ -1,14 +1,24 @@
 package com.levelup.backend.dto;
 
 import java.util.Map;
+import java.util.List;
 
 public class UserStatsDTO {
+    private String name; // ✅ Add this
     private int totalXp;
     private int level;
     private Map<String, Long> taskCountByType;
     private Map<String, Long> taskCountByStatus;
+    private List<TaskSummaryDTO> tasks; // New field
 
     // ✅ Getters and setters
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getTotalXp() { return totalXp; }
     public void setTotalXp(int totalXp) { this.totalXp = totalXp; }
 
@@ -20,6 +30,9 @@ public class UserStatsDTO {
 
     public Map<String, Long> getTaskCountByStatus() { return taskCountByStatus; }
     public void setTaskCountByStatus(Map<String, Long> taskCountByStatus) { this.taskCountByStatus = taskCountByStatus; }
+
+    public List<TaskSummaryDTO> getTasks() { return tasks; }
+    public void setTasks(List<TaskSummaryDTO> tasks) { this.tasks = tasks; }
 
 
 }

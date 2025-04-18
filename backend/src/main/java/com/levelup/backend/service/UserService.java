@@ -1,14 +1,14 @@
 package com.levelup.backend.service;
 
-import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.levelup.backend.dto.UserStatsDTO;
-import com.levelup.backend.model.TaskStatus;
+import com.levelup.backend.dto.TaskSummaryDTO;
 import com.levelup.backend.model.Task;
+import com.levelup.backend.model.TaskStatus;
 import com.levelup.backend.model.User;
 import com.levelup.backend.repository.TaskRepository;
 import com.levelup.backend.repository.UserRepository;
@@ -47,12 +47,21 @@ public class UserService {
 
         UserStatsDTO stats = new UserStatsDTO();
 
-        // Total XP and current level
+        // Name, Total XP and current level
+        stats.setName(user.getName());
         stats.setTotalXp(user.getXp());
         stats.setLevel(calculateLevel(user.getXp()));
 
-        // Count tasks by type (MAIN, SIDE, DAILY)
+        
+        // Get user tasks
         List<Task> userTasks = taskRepository.findByUserId(userId);
+
+        // Filter only pending tasks
+        List<Task> pendingTasks = userTasks.stream()
+            .filter(task -> task.getStatus() == TaskStatus.PENDING)
+            .collect(Collectors.toList());
+        
+        // Count tasks by type (MAIN, SIDE, DAILY)
         Map<String, Long> countByType = userTasks.stream()
             .collect(Collectors.groupingBy(t -> t.getType().toString(), Collectors.counting()));
         stats.setTaskCountByType(countByType);
@@ -61,6 +70,13 @@ public class UserService {
         Map<String, Long> countByStatus = userTasks.stream()
             .collect(Collectors.groupingBy(t -> t.getStatus().toString(), Collectors.counting()));
         stats.setTaskCountByStatus(countByStatus);
+
+
+        // Task details (title, type, xp)
+        List<TaskSummaryDTO> taskSummaries = pendingTasks.stream()
+            .map(task -> new TaskSummaryDTO(task.getTitle(), task.getType(), task.getXp()))
+        .collect(Collectors.toList());
+        stats.setTasks(taskSummaries);
 
 
         return stats;
