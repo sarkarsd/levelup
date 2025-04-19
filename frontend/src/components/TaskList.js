@@ -1,38 +1,58 @@
-// src/components/TaskList.js
-
 import React, { useEffect, useState } from 'react';
-import api from '../services/api'; // this is our axios config
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import './TaskList.css';
 
 function TaskList() {
+  const { userId } = useParams();
   const [tasks, setTasks] = useState([]);
+  const [selectedDescription, setSelectedDescription] = useState(null);
+  const [error, setError] = useState('');
 
-  // Fetch tasks when the component loads
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/tasks/user/${userId}`);
+        setTasks(response.data);
+      } catch (err) {
+        setError('Failed to fetch tasks');
+      }
+    };
 
-  const fetchTasks = async () => {
-    try {
-      const userId = 1; // Hardcoded user ID for now
-      const response = await api.get(`/tasks/user/${userId}`);
-      setTasks(response.data); // Save tasks in state
-    } catch (error) {
-      console.error('Failed to fetch tasks:', error);
-    }
+    fetchTasks();
+  }, [userId]);
+
+  const toggleDescription = (description) => {
+    setSelectedDescription(selectedDescription === description ? null : description);
   };
 
   return (
-    <div>
-      <h2>Your Tasks</h2>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <strong>{task.title}</strong> - {task.type} - {task.status} - {task.xp} - {task.deadline}
-          </li>
-        ))}
-      </ul>
+    <div className="task-list-container">
+      <h2>All Tasks</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {tasks.length === 0 ? (
+        <p>No tasks found.</p>
+      ) : (
+        <ul className="task-list">
+          {tasks.map((task) => (
+            <li key={task.id} className="task-item" onClick={() => toggleDescription(task.description)}>
+              <div><strong>Title:</strong> {task.title}</div>
+              <div><strong>Type:</strong> {task.type}</div>
+              <div><strong>Status:</strong> {task.status}</div>
+              <div><strong>Created:</strong> {new Date(task.createdAt).toLocaleString()}</div>
+              <div><strong>Deadline:</strong> {task.deadline ? new Date(task.deadline).toLocaleString() : 'N/A'}</div>
+              {selectedDescription === task.description && (
+                <div className="description-box">
+                  <strong>Description:</strong> {task.description || 'No description'}
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
 
 export default TaskList;
+

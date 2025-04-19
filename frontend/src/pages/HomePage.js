@@ -100,8 +100,11 @@ const HomePage = () => {
         
       </div>
 
-      {/* Link to create a new task */}
-      <Link to={`/task-form/${userStats.id}`} className="create-task-btn">Create New Task</Link>
+        {/* Link to create a new task */}
+        <div className="task-buttons">
+          <Link to={`/task-form/${userStats.id}`} className="create-task-btn">Create New Task</Link>
+          <Link to={`/task-list/${userStats.id}`} className="view-task-btn">View All Tasks</Link>
+        </div>
     </div>
   );
 };
