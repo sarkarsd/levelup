@@ -36,7 +36,8 @@ function TaskForm() {
       // Navigate back to the homepage after successful task creation
       navigate('/');  // Use navigate() to redirect to the home page
     } catch (err) {
-      setError(err.response?.data || 'Failed to create task.');
+      const errorMessage = err.response?.data?.message || 'Failed to create task.';
+      setError(errorMessage);
     }
   };
 

@@ -27,7 +27,7 @@ function TaskList() {
       <ul>
         {tasks.map((task) => (
           <li key={task.id}>
-            <strong>{task.title}</strong> - {task.type} - {task.status} - {task.xp}
+            <strong>{task.title}</strong> - {task.type} - {task.status} - {task.xp} - {task.deadline}
           </li>
         ))}
       </ul>

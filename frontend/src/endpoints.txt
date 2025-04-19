@@ -1,0 +1,83 @@
+
+
+----------------------------------------------------TaskController-----------------------------------------------------------------------------
+
+POST http://localhost:8080/tasks -> create tasks -> Body = {
+                                                                "title": "Do Dinner",
+                                                                "type": "DAILY",
+                                                                "deadline": "",
+                                                                "user": {
+                                                                    "id": 1
+                                                                }
+                                                            }
+
+
+GET http://localhost:8080/tasks/user/{id} -> fetch tasks by user id -> Body =  [   {
+                                                                                    "id": 1,
+                                                                                    "user": {
+                                                                                        "id": 1,
+                                                                                        "name": "Alice",
+                                                                                        "email": "alice@example.com",
+                                                                                        "password": "mypassword",
+                                                                                        "level": 0,
+                                                                                        "xp": 0
+                                                                                    },
+                                                                                    "title": "Do Homework",
+                                                                                    "description": "Complete maths chapter 3",
+                                                                                    "type": "SIDE",
+                                                                                    "status": "COMPLETED",
+                                                                                    "createdAt": "2025-04-16T22:53:23.111041",
+                                                                                    "deadline": "2025-04-20T23:59:00",
+                                                                                    "xp": 20
+                                                                                },
+                                                                            ]
+
+
+
+POST http://localhost:8080/tasks/{id}/complete -> create tasks -> Body = Task completed! XP added and level updated.
+
+
+-------------------------------------------------UserController----------------------------------------------------------
+
+GET http://localhost:8080/users -> get all users -> Body = [
+                                                                {
+                                                                    "id": 1,
+                                                                    "name": "Alice",
+                                                                    "email": "alice@example.com",
+                                                                    "password": "mypassword",
+                                                                    "level": 0,
+                                                                    "xp": 20
+                                                                }
+                                                            ]
+
+
+POST http://localhost:8080/users -> create a user -> Body = {
+                                                                "name": "Austin",
+                                                                "email": "austin@gmail.com",
+                                                                "password": "mypassword123" 
+                                                            }
+
+
+
+
+GET http://localhost:8080/users/1/stats -> Get stats of the user with {id} -> Body =    {
+                                                                                            "name": "Alice",
+                                                                                            "totalXp": 20,
+                                                                                            "level": 0,
+                                                                                            "taskCountByType": {
+                                                                                                "SIDE": 3,
+                                                                                                "DAILY": 1
+                                                                                            },
+                                                                                            "taskCountByStatus": {
+                                                                                                "COMPLETED": 2,
+                                                                                                "FAILED": 1,
+                                                                                                "PENDING": 1
+                                                                                            },
+                                                                                            "tasks": [
+                                                                                                {
+                                                                                                    "title": "Do Dinner",
+                                                                                                    "type": "DAILY",
+                                                                                                    "xp": 10
+                                                                                                }
+                                                                                            ]
+                                                                                        }
