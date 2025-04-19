@@ -48,6 +48,7 @@ public class UserService {
         UserStatsDTO stats = new UserStatsDTO();
 
         // Name, Total XP and current level
+        stats.setId(userId);
         stats.setName(user.getName());
         stats.setTotalXp(user.getXp());
         stats.setLevel(calculateLevel(user.getXp()));

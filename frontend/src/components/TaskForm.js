@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Correct import for useNavigate
+import { useNavigate, useParams  } from 'react-router-dom'; // Correct import for useNavigate
 import './TaskForm.css'; // We'll add styling here
 
 function TaskForm() {
   const navigate = useNavigate(); // Using useNavigate for navigation
+  const { userId } = useParams(); // Access the userId passed from the HomePage
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState('MAIN');
@@ -15,11 +16,11 @@ function TaskForm() {
     e.preventDefault();
 
     const task = {
+      user: { id: userId }, // Using userId from URL parameters
       title,
       description,
       type,
       deadline: (type === 'DAILY') ? null : deadline,
-      userId: 1, // Assuming user ID is 1 for this example
     };
 
     try {

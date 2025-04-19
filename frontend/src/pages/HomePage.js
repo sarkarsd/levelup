@@ -22,6 +22,12 @@ const HomePage = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (userStats) {
+      console.log('Checking User ID::', userStats.id);
+    }
+  }, [userStats]);
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -95,7 +101,7 @@ const HomePage = () => {
       </div>
 
       {/* Link to create a new task */}
-      <Link to="/task-form" className="create-task-btn">Create New Task</Link>
+      <Link to={`/task-form/${userStats.id}`} className="create-task-btn">Create New Task</Link>
     </div>
   );
 };

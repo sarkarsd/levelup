@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.List;
 
 public class UserStatsDTO {
+    private Long id;
     private String name; // ✅ Add this
     private int totalXp;
     private int level;
@@ -17,6 +18,13 @@ public class UserStatsDTO {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getTotalXp() { return totalXp; }

@@ -3,12 +3,14 @@
 ----------------------------------------------------TaskController-----------------------------------------------------------------------------
 
 POST http://localhost:8080/tasks -> create tasks -> Body = {
-                                                                "title": "Do Dinner",
-                                                                "type": "DAILY",
-                                                                "deadline": "",
                                                                 "user": {
                                                                     "id": 1
-                                                                }
+                                                                },
+                                                                "title": "Do Dinner",
+                                                                "description": "",
+                                                                "type": "DAILY",
+                                                                "deadline": "",
+                                                                
                                                             }
 
 
@@ -61,6 +63,7 @@ POST http://localhost:8080/users -> create a user -> Body = {
 
 
 GET http://localhost:8080/users/1/stats -> Get stats of the user with {id} -> Body =    {
+                                                                                            "id": 1,
                                                                                             "name": "Alice",
                                                                                             "totalXp": 20,
                                                                                             "level": 0,
